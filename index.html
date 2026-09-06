@@ -3,52 +3,53 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#0b0b10">
 <title>Protein & Fiber</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:#111827;background:#f5f5f7}
-*{box-sizing:border-box} body{margin:0} button,input,select{font:inherit}
-.app{max-width:720px;margin:auto;padding:env(safe-area-inset-top) 16px calc(88px + env(safe-area-inset-bottom))}
+:root{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+  color:#f7f7fb;background:#0b0b10;
+  --bg:#0b0b10;--card:#15151d;--card2:#1d1d27;--muted:#9b9bac;--line:#2b2b38;--accent:#ff4fa3;--accent2:#ff7fbd
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f7fb}button,input,select{font:inherit}
+.app{max-width:720px;margin:auto;padding:env(safe-area-inset-top) 16px calc(90px + env(safe-area-inset-bottom))}
 header{padding:22px 4px 10px;display:flex;justify-content:space-between;align-items:center}
-h1{font-size:28px;margin:0}.date{color:#6b7280;font-size:14px;margin-top:4px}
-.card{background:white;border-radius:18px;padding:18px;margin:10px 0;box-shadow:0 1px 3px #0000000d}
-.metric{margin-bottom:18px}.metric:last-child{margin-bottom:0}.metrichead{display:flex;justify-content:space-between;font-weight:700}.metrichead span:last-child{font-weight:600;color:#374151}
-.bar{height:12px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:9px}.fill{height:100%;border-radius:99px;background:#111827}
-.sub{color:#6b7280;font-size:13px;margin-top:5px}
-.primary{width:100%;border:0;border-radius:15px;padding:15px;background:#111827;color:white;font-weight:700;font-size:17px}
-.secondary{border:0;background:#eef0f3;border-radius:12px;padding:10px 13px;font-weight:600}
-.entry{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid #eee}.entry:last-child{border:0}.entry strong{display:block}.entry small{color:#6b7280}.nums{text-align:right;white-space:nowrap}.empty{text-align:center;color:#6b7280;padding:24px 0}
-nav{position:fixed;left:0;right:0;bottom:0;background:#ffffffef;backdrop-filter:blur(12px);border-top:1px solid #ddd;display:flex;justify-content:center;gap:8px;padding:9px 10px calc(9px + env(safe-area-inset-bottom));z-index:10}
-nav button{border:0;background:none;padding:8px 18px;border-radius:12px;color:#6b7280}nav button.active{background:#eef0f3;color:#111827;font-weight:700}
+h1{font-size:28px;margin:0}.date{color:var(--muted);font-size:14px;margin-top:4px}
+.card{background:var(--card);border-radius:18px;padding:18px;margin:10px 0;box-shadow:0 1px 0 #ffffff08 inset}
+.metric{margin-bottom:18px}.metric:last-child{margin-bottom:0}.metrichead{display:flex;justify-content:space-between;font-weight:700}.metrichead span:last-child{font-weight:600;color:#e5e5ef}
+.bar{height:12px;background:#2a2a36;border-radius:99px;overflow:hidden;margin-top:9px}.fill{height:100%;border-radius:99px;background:var(--accent)}
+.sub{color:var(--muted);font-size:13px;margin-top:5px}
+.primary{width:100%;border:0;border-radius:15px;padding:15px;background:var(--accent);color:white;font-weight:800;font-size:17px}
+.secondary{border:0;background:var(--card2);color:#f7f7fb;border-radius:12px;padding:10px 13px;font-weight:700}
+.optiongrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.optionbtn{border:1px solid var(--line);background:var(--card);color:#fff;border-radius:16px;padding:16px 12px;font-weight:800;font-size:16px}
+.entry{display:flex;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}.entry:last-child{border:0}.entry strong{display:block}.entry small{color:var(--muted)}.nums{text-align:right;white-space:nowrap}.empty{text-align:center;color:var(--muted);padding:24px 0}
+nav{position:fixed;left:0;right:0;bottom:0;background:#0f0f16ee;backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:center;gap:8px;padding:9px 10px calc(9px + env(safe-area-inset-bottom));z-index:10}
+nav button{border:0;background:none;padding:8px 18px;border-radius:12px;color:var(--muted)}nav button.active{background:var(--card2);color:#fff;font-weight:800}
 .view{display:none}.view.active{display:block}
-.modal{position:fixed;inset:0;background:#0006;display:none;align-items:flex-end;z-index:20}.modal.show{display:flex}
-.sheet{background:#fff;width:100%;max-height:90vh;border-radius:22px 22px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));overflow:auto}
-.row{display:flex;gap:10px}.row>*{flex:1}label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}
-input,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:11px;background:white}.actions{display:flex;gap:10px;margin-top:18px}.actions>*{flex:1}
-.foodrow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #eee}
-.foodrow button{border:0;background:#eef0f3;border-radius:9px;padding:7px 10px}
-.chartwrap{height:240px;margin-top:12px}.small{font-size:12px;color:#6b7280}
+.modal{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;z-index:20}.modal.show{display:flex}
+.sheet{background:var(--card);width:100%;max-height:92vh;border-radius:22px 22px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));overflow:auto}
+.row{display:flex;gap:10px}.row>*{flex:1}label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#101017;color:#fff}
+input::placeholder{color:#6f6f80}.actions{display:flex;gap:10px;margin-top:18px}.actions>*{flex:1}
+.foodrow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.foodrow button{border:0;background:var(--card2);color:#fff;border-radius:9px;padding:7px 10px}
+.chartwrap{height:240px;margin-top:12px}.small{font-size:12px;color:var(--muted)}
 h2{font-size:19px;margin:4px 0 12px}
-
-.lock{position:fixed;inset:0;background:#f5f5f7;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
-.lock.hidden{display:none}
-.lockcard{width:100%;max-width:360px;background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 30px #00000012}
-.lockcard h2{margin:0 0 8px;font-size:24px}
-.lockcard p{margin:0 0 16px;color:#6b7280;font-size:14px}
-.lockerror{min-height:18px;color:#b91c1c;font-size:13px;margin-top:8px}
-
+.lock{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
+.lock.hidden{display:none}.lockcard{width:100%;max-width:340px}.lockerror{min-height:18px;color:#ff8b8b;font-size:13px;margin-top:8px}
+.searchlist{margin-top:10px;max-height:42vh;overflow:auto;border-top:1px solid var(--line)}
+.searchitem{display:flex;justify-content:space-between;align-items:center;padding:14px 2px;border-bottom:1px solid var(--line);gap:12px}
+.searchitem button{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:8px 10px;font-weight:800}
 </style>
 </head>
 <body>
-
 <div id="lockScreen" class="lock">
   <div class="lockcard">
-    <h2>Protein & Fiber</h2>
-    <p>Enter password to unlock.</p>
     <input id="lockPassword" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')unlockApp()">
-    <button class="primary" style="margin-top:12px" onclick="unlockApp()">Unlock</button>
+    <button class="primary" style="margin-top:12px" onclick="unlockApp()">Submit</button>
     <div id="lockError" class="lockerror"></div>
   </div>
 </div>
@@ -61,13 +62,18 @@ h2{font-size:19px;margin:4px 0 12px}
   <div class="metric"><div class="metrichead"><span>Protein</span><span id="proteinTotal"></span></div><div class="bar"><div id="proteinBar" class="fill"></div></div><div class="sub" id="proteinPct"></div></div>
   <div class="metric"><div class="metrichead"><span>Fiber</span><span id="fiberTotal"></span></div><div class="bar"><div id="fiberBar" class="fill"></div></div><div class="sub" id="fiberPct"></div></div>
 </div>
-<button class="primary" onclick="openAdd()">＋ Add food or entry</button>
+
+<div class="optiongrid">
+  <button class="optionbtn" onclick="openQuickAdd()">Quick Add</button>
+  <button class="optionbtn" onclick="openManual()">Manual Log</button>
+</div>
+
 <div class="card"><h2>Today's entries</h2><div id="entries"></div></div>
 </section>
 
 <section id="history" class="view">
-<div class="card"><h2>Protein — last 30 days</h2><div class="chartwrap"><canvas id="proteinChart"></canvas></div></div>
-<div class="card"><h2>Fiber — last 30 days</h2><div class="chartwrap"><canvas id="fiberChart"></canvas></div></div>
+<div class="card"><h2>Protein — last 14 days</h2><div class="chartwrap"><canvas id="proteinChart"></canvas></div></div>
+<div class="card"><h2>Fiber — last 14 days</h2><div class="chartwrap"><canvas id="fiberChart"></canvas></div></div>
 <div class="card"><h2>Daily totals</h2><div id="dailyList"></div></div>
 </section>
 
@@ -95,14 +101,26 @@ h2{font-size:19px;margin:4px 0 12px}
 <button onclick="showView('settings',this)">Settings</button>
 </nav>
 
-<div id="addModal" class="modal"><div class="sheet">
-<h2>Add entry</h2>
-<label>Common food</label><select id="foodSelect" onchange="updateFoodHint()"></select><div class="small" id="foodHint"></div>
-<label>Quantity / servings</label><input id="qty" type="number" value="1" min="0.01" step="0.25">
-<div class="small" style="margin-top:8px">Or choose Manual entry to enter grams directly.</div>
-<label>Entry name</label><input id="entryName" placeholder="e.g. Protein shake">
+<div id="quickModal" class="modal"><div class="sheet">
+<h2>Quick Add</h2>
+<label>Date</label><input id="quickDate" type="date">
+<label>Search foods</label><input id="foodSearch" type="search" placeholder="Search..." oninput="renderQuickFoods()">
+<div id="quickFoods" class="searchlist"></div>
+</div></div>
+
+<div id="quickQtyModal" class="modal"><div class="sheet">
+<h2 id="quickFoodTitle">Add food</h2>
+<div class="small" id="quickFoodHint"></div>
+<label>Quantity / servings</label><input id="quickQty" type="number" value="1" min="0.01" step="0.25">
+<div class="actions"><button class="secondary" onclick="closeModal('quickQtyModal')">Cancel</button><button class="primary" onclick="saveQuickEntry()">Save</button></div>
+</div></div>
+
+<div id="manualModal" class="modal"><div class="sheet">
+<h2>Manual Log</h2>
+<label>Date</label><input id="manualDate" type="date">
+<label>Entry name</label><input id="manualName" placeholder="e.g. Protein shake">
 <div class="row"><div><label>Protein (g)</label><input id="manualProtein" type="number" min="0" step="0.1" placeholder="0"></div><div><label>Fiber (g)</label><input id="manualFiber" type="number" min="0" step="0.1" placeholder="0"></div></div>
-<div class="actions"><button class="secondary" onclick="closeModal('addModal')">Cancel</button><button class="primary" onclick="saveEntry()">Save</button></div>
+<div class="actions"><button class="secondary" onclick="closeModal('manualModal')">Cancel</button><button class="primary" onclick="saveManualEntry()">Save</button></div>
 </div></div>
 
 <div id="foodModal" class="modal"><div class="sheet">
@@ -115,24 +133,18 @@ h2{font-size:19px;margin:4px 0 12px}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
 const LOCK_KEY='pftracker-unlocked';
-const PASSWORD_HASH='2a3a34bbf76fe56ee18db90d500a1afe77bcd32337b0f5249dc81582479ba3c7';
+const PASSWORD_HASH='34bbdd4a9ff40c98587d1ad82ab1f18a9d5f3209c8024a84c47fbe35cbe2bcbb';
 
 async function sha256(text){
   const data=new TextEncoder().encode(text);
   const digest=await crypto.subtle.digest('SHA-256',data);
   return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-
 function checkLock(){
-  if(localStorage.getItem(LOCK_KEY)==='yes'){
-    document.getElementById('lockScreen').classList.add('hidden');
-  }else{
-    setTimeout(()=>document.getElementById('lockPassword')?.focus(),100);
-  }
+  if(localStorage.getItem(LOCK_KEY)==='yes') document.getElementById('lockScreen').classList.add('hidden');
+  else setTimeout(()=>document.getElementById('lockPassword')?.focus(),100);
 }
-
 async function unlockApp(){
   const p=document.getElementById('lockPassword').value;
   const h=await sha256(p);
@@ -148,7 +160,7 @@ async function unlockApp(){
 }
 
 const KEY='pftracker-v1';
-const todayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const localDateKey=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const fmtDate=s=>new Date(s+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'});
 let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
  goals:{protein:200,fiber:35},
@@ -161,49 +173,111 @@ let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
  entries:[]
 };
 function save(){localStorage.setItem(KEY,JSON.stringify(db))}
-function showView(id,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('title').textContent={today:'Today',history:'History',foods:'Foods',settings:'Settings'}[id];if(id==='history')renderHistory();if(id==='foods')renderFoods();if(id==='settings')renderSettings()}
+function showView(id,btn){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('title').textContent={today:'Today',history:'History',foods:'Foods',settings:'Settings'}[id];
+  if(id==='history')renderHistory(); if(id==='foods')renderFoods(); if(id==='settings')renderSettings()
+}
 function totals(date){return db.entries.filter(e=>e.date===date).reduce((a,e)=>({protein:a.protein+Number(e.protein||0),fiber:a.fiber+Number(e.fiber||0)}),{protein:0,fiber:0})}
 function renderToday(){
- const d=todayKey(), t=totals(d); document.getElementById('date').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
- document.getElementById('proteinTotal').textContent=`${t.protein.toFixed(1).replace('.0','')} / ${db.goals.protein} g`;
- document.getElementById('fiberTotal').textContent=`${t.fiber.toFixed(1).replace('.0','')} / ${db.goals.fiber} g`;
+ const d=localDateKey(), t=totals(d);
+ document.getElementById('date').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+ document.getElementById('proteinTotal').textContent=`${fmtNum(t.protein)} / ${db.goals.protein} g`;
+ document.getElementById('fiberTotal').textContent=`${fmtNum(t.fiber)} / ${db.goals.fiber} g`;
  const pp=db.goals.protein?t.protein/db.goals.protein*100:0, fp=db.goals.fiber?t.fiber/db.goals.fiber*100:0;
- document.getElementById('proteinBar').style.width=Math.min(100,pp)+'%';document.getElementById('fiberBar').style.width=Math.min(100,fp)+'%';
- document.getElementById('proteinPct').textContent=Math.round(pp)+'% of goal';document.getElementById('fiberPct').textContent=Math.round(fp)+'% of goal';
- const arr=db.entries.filter(e=>e.date===d).sort((a,b)=>b.ts-a.ts);const box=document.getElementById('entries');
+ document.getElementById('proteinBar').style.width=Math.min(100,pp)+'%'; document.getElementById('fiberBar').style.width=Math.min(100,fp)+'%';
+ document.getElementById('proteinPct').textContent=Math.round(pp)+'% of goal'; document.getElementById('fiberPct').textContent=Math.round(fp)+'% of goal';
+ const arr=db.entries.filter(e=>e.date===d).sort((a,b)=>b.ts-a.ts), box=document.getElementById('entries');
  box.innerHTML=arr.length?arr.map(e=>`<div class="entry"><div><strong>${esc(e.name)}</strong><small>${new Date(e.ts).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}${e.quantity?` · ${e.quantity} serving${e.quantity==1?'':'s'}`:''}</small></div><div class="nums"><strong>+${e.protein}g P</strong><small>+${e.fiber}g F</small><br><button class="secondary" style="padding:4px 8px;margin-top:4px" onclick="delEntry('${e.id}')">Delete</button></div></div>`).join(''):'<div class="empty">Nothing logged yet.</div>';
 }
+function fmtNum(n){return Number(n).toFixed(1).replace('.0','')}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function openAdd(){populateFoods();document.getElementById('qty').value=1;document.getElementById('entryName').value='';document.getElementById('manualProtein').value='';document.getElementById('manualFiber').value='';updateFoodHint();document.getElementById('addModal').classList.add('show')}
-function populateFoods(){document.getElementById('foodSelect').innerHTML='<option value="">Manual entry</option>'+db.foods.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}
-function updateFoodHint(){const f=db.foods.find(x=>x.id===document.getElementById('foodSelect').value);document.getElementById('foodHint').textContent=f?`${f.protein}g protein · ${f.fiber}g fiber per ${f.serving}`:'Enter protein and fiber grams below.'}
-function saveEntry(){
- const id=document.getElementById('foodSelect').value, f=db.foods.find(x=>x.id===id), q=Number(document.getElementById('qty').value)||1;
- let name=document.getElementById('entryName').value.trim(), p,fi;
- if(f){name=name||f.name;p=f.protein*q;fi=f.fiber*q}else{p=Number(document.getElementById('manualProtein').value)||0;fi=Number(document.getElementById('manualFiber').value)||0;name=name||'Manual entry'}
- db.entries.push({id:crypto.randomUUID(),ts:Date.now(),date:todayKey(),name,quantity:f?q:null,protein:+p.toFixed(1),fiber:+fi.toFixed(1)});save();closeModal('addModal');renderToday()
+
+let selectedQuickFoodId=null;
+function openQuickAdd(){
+  document.getElementById('quickDate').value=localDateKey();
+  document.getElementById('foodSearch').value='';
+  renderQuickFoods();
+  document.getElementById('quickModal').classList.add('show');
+  setTimeout(()=>document.getElementById('foodSearch').focus(),100)
 }
+function renderQuickFoods(){
+  const q=document.getElementById('foodSearch').value.trim().toLowerCase();
+  const foods=db.foods.filter(f=>!q || f.name.toLowerCase().includes(q));
+  document.getElementById('quickFoods').innerHTML=foods.length?foods.map(f=>`<div class="searchitem"><div><strong>${esc(f.name)}</strong><div class="small">${f.protein}g protein · ${f.fiber}g fiber · ${esc(f.serving)}</div></div><button onclick="chooseQuickFood('${f.id}')">Select</button></div>`).join(''):'<div class="empty">No matching foods.</div>'
+}
+function chooseQuickFood(id){
+  const f=db.foods.find(x=>x.id===id); if(!f)return;
+  selectedQuickFoodId=id;
+  document.getElementById('quickFoodTitle').textContent=f.name;
+  document.getElementById('quickFoodHint').textContent=`${f.protein}g protein · ${f.fiber}g fiber per ${f.serving}`;
+  document.getElementById('quickQty').value=1;
+  document.getElementById('quickQtyModal').classList.add('show')
+}
+function saveQuickEntry(){
+  const f=db.foods.find(x=>x.id===selectedQuickFoodId); if(!f)return;
+  const q=Number(document.getElementById('quickQty').value)||1;
+  const date=document.getElementById('quickDate').value||localDateKey();
+  db.entries.push({id:crypto.randomUUID(),ts:Date.now(),date,name:f.name,quantity:q,protein:+(f.protein*q).toFixed(1),fiber:+(f.fiber*q).toFixed(1)});
+  save(); closeModal('quickQtyModal'); closeModal('quickModal'); renderToday()
+}
+function openManual(){
+  document.getElementById('manualDate').value=localDateKey();
+  document.getElementById('manualName').value='';
+  document.getElementById('manualProtein').value='';
+  document.getElementById('manualFiber').value='';
+  document.getElementById('manualModal').classList.add('show')
+}
+function saveManualEntry(){
+  const name=document.getElementById('manualName').value.trim()||'Manual entry';
+  const p=Number(document.getElementById('manualProtein').value)||0;
+  const f=Number(document.getElementById('manualFiber').value)||0;
+  const date=document.getElementById('manualDate').value||localDateKey();
+  db.entries.push({id:crypto.randomUUID(),ts:Date.now(),date,name,quantity:null,protein:+p.toFixed(1),fiber:+f.toFixed(1)});
+  save(); closeModal('manualModal'); renderToday()
+}
+
 function delEntry(id){if(confirm('Delete this entry?')){db.entries=db.entries.filter(e=>e.id!==id);save();renderToday()}}
-function renderFoods(){document.getElementById('foodsList').innerHTML=db.foods.length?db.foods.map(f=>`<div class="foodrow"><div><strong>${esc(f.name)}</strong><div class="small">${f.protein}g P · ${f.fiber}g F · ${esc(f.serving)}</div></div><button onclick="delFood('${f.id}')">Delete</button></div>`).join(''):'<div class="empty">No foods yet.</div>'}
+function renderFoods(){document.getElementById('foodsList').innerHTML=db.foods.length?db.foods.map(f=>`<div class="foodrow"><div><strong>${esc(f.name)}</strong><div class="small">${f.protein}g protein · ${f.fiber}g fiber · ${esc(f.serving)}</div></div><button onclick="delFood('${f.id}')">Delete</button></div>`).join(''):'<div class="empty">No foods yet.</div>'}
 function openFood(){['newFoodName','newFoodProtein','newFoodFiber','newFoodServing'].forEach(id=>document.getElementById(id).value='');document.getElementById('foodModal').classList.add('show')}
-function saveFood(){const name=document.getElementById('newFoodName').value.trim();if(!name)return alert('Enter a food name.');db.foods.push({id:crypto.randomUUID(),name,protein:Number(document.getElementById('newFoodProtein').value)||0,fiber:Number(document.getElementById('newFoodFiber').value)||0,serving:document.getElementById('newFoodServing').value.trim()||'1 serving'});save();closeModal('foodModal');renderFoods()}
+function saveFood(){
+ const name=document.getElementById('newFoodName').value.trim(); if(!name)return alert('Enter a food name.');
+ db.foods.push({id:crypto.randomUUID(),name,protein:Number(document.getElementById('newFoodProtein').value)||0,fiber:Number(document.getElementById('newFoodFiber').value)||0,serving:document.getElementById('newFoodServing').value.trim()||'1 serving'});
+ save(); closeModal('foodModal'); renderFoods()
+}
 function delFood(id){if(confirm('Delete this common food? Existing logged entries will remain unchanged.')){db.foods=db.foods.filter(f=>f.id!==id);save();renderFoods()}}
 function renderSettings(){document.getElementById('goalProtein').value=db.goals.protein;document.getElementById('goalFiber').value=db.goals.fiber}
 function saveGoals(){db.goals.protein=Number(document.getElementById('goalProtein').value)||0;db.goals.fiber=Number(document.getElementById('goalFiber').value)||0;save();renderToday();alert('Goals saved.')}
 let charts=[];
 function renderHistory(){
  charts.forEach(c=>c.destroy());charts=[];
- const dates=[];for(let i=29;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);dates.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))}
+ const dates=[];for(let i=13;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);dates.push(localDateKey(d))}
  const p=dates.map(d=>totals(d).protein), f=dates.map(d=>totals(d).fiber), labels=dates.map(fmtDate);
- charts.push(makeChart('proteinChart',labels,p,db.goals.protein));charts.push(makeChart('fiberChart',labels,f,db.goals.fiber));
- document.getElementById('dailyList').innerHTML=dates.slice().reverse().map(d=>{const t=totals(d);return `<div class="entry"><div><strong>${fmtDate(d)}</strong></div><div class="nums"><strong>${t.protein.toFixed(1).replace('.0','')} / ${db.goals.protein}g P</strong><small>${t.fiber.toFixed(1).replace('.0','')} / ${db.goals.fiber}g F</small></div></div>`}).join('')
+ charts.push(makeChart('proteinChart',labels,p,db.goals.protein)); charts.push(makeChart('fiberChart',labels,f,db.goals.fiber));
+ document.getElementById('dailyList').innerHTML=dates.slice().reverse().map(d=>{const t=totals(d);return `<div class="entry"><div><strong>${fmtDate(d)}</strong></div><div class="nums"><strong>${fmtNum(t.protein)} / ${db.goals.protein}g P</strong><small>${fmtNum(t.fiber)} / ${db.goals.fiber}g F</small></div></div>`}).join('')
 }
-function makeChart(id,labels,data,goal){return new Chart(document.getElementById(id),{type:'line',data:{labels,datasets:[{label:'Actual',data,borderWidth:2,tension:.25,pointRadius:2},{label:'Goal',data:labels.map(()=>goal),borderDash:[6,5],borderWidth:1,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}},scales:{y:{beginAtZero:true}}}})}
-function exportData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='protein-fiber-backup-'+todayKey()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function makeChart(id,labels,data,goal){
+ return new Chart(document.getElementById(id),{
+  type:'line',
+  data:{labels,datasets:[
+   {label:'Actual',data,borderWidth:2,tension:.25,pointRadius:2,borderColor:'#ff4fa3',backgroundColor:'#ff4fa3'},
+   {label:'Goal',data:labels.map(()=>goal),borderDash:[6,5],borderWidth:1,pointRadius:0,borderColor:'#8b8b9a'}
+  ]},
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,labels:{color:'#d8d8e2'}}},
+    scales:{x:{ticks:{color:'#9b9bac'},grid:{color:'#242430'}},y:{beginAtZero:true,ticks:{color:'#9b9bac'},grid:{color:'#242430'}}}
+  }
+ })
+}
+function exportData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='protein-fiber-backup-'+localDateKey()+'.json';a.click();URL.revokeObjectURL(a.href)}
 function importData(ev){const file=ev.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.goals||!x.foods||!x.entries)throw 0;if(confirm('Replace current data with this backup?')){db=x;save();renderToday();alert('Imported.')}}catch{alert('Invalid backup file.')}};r.readAsText(file)}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
-checkLock();
-renderToday();
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
+checkLock(); renderToday();
 </script>
 </body>
 </html>
