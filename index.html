@@ -64,8 +64,8 @@ h2{font-size:19px;margin:4px 0 12px}
 </div>
 
 <div class="optiongrid">
-  <button class="optionbtn" onclick="openQuickAdd()">Quick Add</button>
-  <button class="optionbtn" onclick="openManual()">Manual Log</button>
+  <button class="primary" onclick="openQuickAdd()">+ Quick add</button>
+  <button class="primary" onclick="openManual()">+ Manual log</button>
 </div>
 
 <div class="card"><h2>Today's entries</h2><div id="entries"></div></div>
@@ -162,17 +162,31 @@ async function unlockApp(){
 const KEY='pftracker-v1';
 const localDateKey=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const fmtDate=s=>new Date(s+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'});
-let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
- goals:{protein:200,fiber:35},
- foods:[
-  {id:'1',name:'Chicken breast',protein:31,fiber:0,serving:'4 oz'},
-  {id:'2',name:'Greek yogurt',protein:17,fiber:0,serving:'1 container'},
-  {id:'3',name:'Black beans',protein:15,fiber:15,serving:'1 cup'},
-  {id:'4',name:'Oatmeal',protein:5,fiber:4,serving:'1 serving'}
- ],
- entries:[]
-};
-function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function makeFreshDB(){
+  return {goals:{protein:100,fiber:30},foods:[],entries:[]};
+}
+let db;
+const storedRaw=localStorage.getItem(KEY);
+if(storedRaw!==null){
+  try{
+    db=JSON.parse(storedRaw);
+    if(!db || typeof db!=='object') throw new Error('Invalid data');
+    if(!db.goals) db.goals={protein:100,fiber:30};
+    if(!Array.isArray(db.foods)) db.foods=[];
+    if(!Array.isArray(db.entries)) db.entries=[];
+  }catch(err){
+    // Never overwrite unreadable existing data automatically.
+    db=makeFreshDB();
+    alert('Your saved tracker data could not be read. This version will not overwrite the stored copy automatically. Export or inspect site data before saving new entries.');
+  }
+}else{
+  db=makeFreshDB();
+}
+function save(){
+  const current=localStorage.getItem(KEY);
+  if(current!==null) localStorage.setItem('pftracker-backup-v1',current);
+  localStorage.setItem(KEY,JSON.stringify(db));
+}
 function showView(id,btn){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   document.getElementById(id).classList.add('active');
