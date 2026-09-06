@@ -35,7 +35,7 @@ nav button{border:0;background:none;padding:8px 18px;border-radius:12px;color:va
 input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#101017;color:#fff}
 input::placeholder{color:#6f6f80}.actions{display:flex;gap:10px;margin-top:18px}.actions>*{flex:1}
 .foodrow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
-.foodrow button{border:0;background:var(--card2);color:#fff;border-radius:9px;padding:7px 10px}
+.foodrow button{border:0;background:transparent;color:#ff6b6b;border-radius:9px;padding:7px 10px;font-weight:700}.danger{color:#ff6b6b!important;background:transparent!important}
 .chartwrap{height:240px;margin-top:12px}.small{font-size:12px;color:var(--muted)}
 h2{font-size:19px;margin:4px 0 12px}
 .lock{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
@@ -139,7 +139,7 @@ function checkLock(){
   else setTimeout(()=>document.getElementById('lockPassword')?.focus(),100);
 }
 async function unlockApp(){
-  const p=document.getElementById('lockPassword').value;
+  const p=document.getElementById('lockPassword').value.trim();
   const h=await sha256(p);
   if(h===PASSWORD_HASH){
     localStorage.setItem(LOCK_KEY,'yes');
@@ -198,7 +198,7 @@ function renderToday(){
  document.getElementById('proteinBar').style.width=Math.min(100,pp)+'%'; document.getElementById('fiberBar').style.width=Math.min(100,fp)+'%';
  document.getElementById('proteinPct').textContent=Math.round(pp)+'% of goal'; document.getElementById('fiberPct').textContent=Math.round(fp)+'% of goal';
  const arr=db.entries.filter(e=>e.date===d).sort((a,b)=>b.ts-a.ts), box=document.getElementById('entries');
- box.innerHTML=arr.length?arr.map(e=>`<div class="entry"><div><strong>${esc(e.name)}</strong><small>${new Date(e.ts).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}${e.quantity?` · ${e.quantity} serving${e.quantity==1?'':'s'}`:''}</small></div><div class="nums"><strong>+${e.protein}g protein</strong><small>+${e.fiber}g fiber</small><br><button class="secondary" style="padding:4px 8px;margin-top:4px" onclick="delEntry('${e.id}')">Delete</button></div></div>`).join(''):'<div class="empty">Nothing logged yet.</div>';
+ box.innerHTML=arr.length?arr.map(e=>`<div class="entry"><div><strong>${esc(e.name)}</strong><small>${new Date(e.ts).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}${e.quantity?` · ${e.quantity} serving${e.quantity==1?'':'s'}`:''}</small></div><div class="nums"><strong>+${e.protein}g protein</strong><small>+${e.fiber}g fiber</small><br><button class="secondary danger" style="padding:4px 8px;margin-top:4px" onclick="delEntry('${e.id}')">Delete</button></div></div>`).join(''):'<div class="empty">Nothing logged yet.</div>';
 }
 function fmtNum(n){return Number(n).toFixed(1).replace('.0','')}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -213,7 +213,7 @@ function openQuickAdd(){
 }
 function renderQuickFoods(){
   const q=document.getElementById('foodSearch').value.trim().toLowerCase();
-  const foods=db.foods.filter(f=>!q || f.name.toLowerCase().includes(q));
+  const foods=db.foods.filter(f=>!q || f.name.toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'}));
   document.getElementById('quickFoods').innerHTML=foods.length?foods.map(f=>`<div class="searchitem"><div><strong>${esc(f.name)}</strong><div class="small">${f.protein}g protein · ${f.fiber}g fiber · ${esc(f.serving)}</div></div><button onclick="chooseQuickFood('${f.id}')">Select</button></div>`).join(''):'<div class="empty">No matching foods.</div>'
 }
 function chooseQuickFood(id){
@@ -250,7 +250,7 @@ function saveManualEntry(){
 }
 
 function delEntry(id){if(confirm('Delete this entry?')){db.entries=db.entries.filter(e=>e.id!==id);save();renderToday()}}
-function renderFoods(){document.getElementById('foodsList').innerHTML=db.foods.length?db.foods.map(f=>`<div class="foodrow"><div><strong>${esc(f.name)}</strong><div class="small">${f.protein}g protein · ${f.fiber}g fiber · ${esc(f.serving)}</div></div><button onclick="delFood('${f.id}')">Delete</button></div>`).join(''):'<div class="empty">No foods yet.</div>'}
+function renderFoods(){const sortedFoods=[...db.foods].sort((a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base'}));document.getElementById('foodsList').innerHTML=sortedFoods.length?sortedFoods.map(f=>`<div class="foodrow"><div><strong>${esc(f.name)}</strong><div class="small">${f.protein}g protein · ${f.fiber}g fiber · ${esc(f.serving)}</div></div><button onclick="delFood('${f.id}')">Delete</button></div>`).join(''):'<div class="empty">No foods yet.</div>'}
 function openFood(){['newFoodName','newFoodProtein','newFoodFiber','newFoodServing'].forEach(id=>document.getElementById(id).value='');document.getElementById('foodModal').classList.add('show')}
 function saveFood(){
  const name=document.getElementById('newFoodName').value.trim(); if(!name)return alert('Enter a food name.');
