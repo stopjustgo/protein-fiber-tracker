@@ -108,13 +108,6 @@ h2{font-size:19px;margin:4px 0 12px}
 <div id="quickFoods" class="searchlist"></div>
 </div></div>
 
-<div id="quickQtyModal" class="modal"><div class="sheet">
-<h2 id="quickFoodTitle">Add food</h2>
-<div class="small" id="quickFoodHint"></div>
-<label>Quantity / servings</label><input id="quickQty" type="number" value="1" min="0.01" step="0.25">
-<div class="actions"><button class="secondary" onclick="closeModal('quickQtyModal')">Cancel</button><button class="primary" onclick="saveQuickEntry()">Save</button></div>
-</div></div>
-
 <div id="manualModal" class="modal"><div class="sheet">
 <h2>Manual Log</h2>
 <label>Date</label><input id="manualDate" type="date">
@@ -205,7 +198,7 @@ function renderToday(){
  document.getElementById('proteinBar').style.width=Math.min(100,pp)+'%'; document.getElementById('fiberBar').style.width=Math.min(100,fp)+'%';
  document.getElementById('proteinPct').textContent=Math.round(pp)+'% of goal'; document.getElementById('fiberPct').textContent=Math.round(fp)+'% of goal';
  const arr=db.entries.filter(e=>e.date===d).sort((a,b)=>b.ts-a.ts), box=document.getElementById('entries');
- box.innerHTML=arr.length?arr.map(e=>`<div class="entry"><div><strong>${esc(e.name)}</strong><small>${new Date(e.ts).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}${e.quantity?` · ${e.quantity} serving${e.quantity==1?'':'s'}`:''}</small></div><div class="nums"><strong>+${e.protein}g P</strong><small>+${e.fiber}g F</small><br><button class="secondary" style="padding:4px 8px;margin-top:4px" onclick="delEntry('${e.id}')">Delete</button></div></div>`).join(''):'<div class="empty">Nothing logged yet.</div>';
+ box.innerHTML=arr.length?arr.map(e=>`<div class="entry"><div><strong>${esc(e.name)}</strong><small>${new Date(e.ts).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}${e.quantity?` · ${e.quantity} serving${e.quantity==1?'':'s'}`:''}</small></div><div class="nums"><strong>+${e.protein}g protein</strong><small>+${e.fiber}g fiber</small><br><button class="secondary" style="padding:4px 8px;margin-top:4px" onclick="delEntry('${e.id}')">Delete</button></div></div>`).join(''):'<div class="empty">Nothing logged yet.</div>';
 }
 function fmtNum(n){return Number(n).toFixed(1).replace('.0','')}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -225,19 +218,21 @@ function renderQuickFoods(){
 }
 function chooseQuickFood(id){
   const f=db.foods.find(x=>x.id===id); if(!f)return;
-  selectedQuickFoodId=id;
-  document.getElementById('quickFoodTitle').textContent=f.name;
-  document.getElementById('quickFoodHint').textContent=`${f.protein}g protein · ${f.fiber}g fiber per ${f.serving}`;
-  document.getElementById('quickQty').value=1;
-  document.getElementById('quickQtyModal').classList.add('show')
-}
-function saveQuickEntry(){
-  const f=db.foods.find(x=>x.id===selectedQuickFoodId); if(!f)return;
-  const q=Number(document.getElementById('quickQty').value)||1;
   const date=document.getElementById('quickDate').value||localDateKey();
-  db.entries.push({id:crypto.randomUUID(),ts:Date.now(),date,name:f.name,quantity:q,protein:+(f.protein*q).toFixed(1),fiber:+(f.fiber*q).toFixed(1)});
-  save(); closeModal('quickQtyModal'); closeModal('quickModal'); renderToday()
+  db.entries.push({
+    id:crypto.randomUUID(),
+    ts:Date.now(),
+    date,
+    name:f.name,
+    quantity:1,
+    protein:+Number(f.protein||0).toFixed(1),
+    fiber:+Number(f.fiber||0).toFixed(1)
+  });
+  save();
+  closeModal('quickModal');
+  renderToday();
 }
+
 function openManual(){
   document.getElementById('manualDate').value=localDateKey();
   document.getElementById('manualName').value='';
@@ -271,7 +266,7 @@ function renderHistory(){
  const dates=[];for(let i=13;i>=0;i--){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-i);dates.push(localDateKey(d))}
  const p=dates.map(d=>totals(d).protein), f=dates.map(d=>totals(d).fiber), labels=dates.map(fmtDate);
  charts.push(makeChart('proteinChart',labels,p,db.goals.protein)); charts.push(makeChart('fiberChart',labels,f,db.goals.fiber));
- document.getElementById('dailyList').innerHTML=dates.slice().reverse().map(d=>{const t=totals(d);return `<div class="entry"><div><strong>${fmtDate(d)}</strong></div><div class="nums"><strong>${fmtNum(t.protein)} / ${db.goals.protein}g P</strong><small>${fmtNum(t.fiber)} / ${db.goals.fiber}g F</small></div></div>`}).join('')
+ document.getElementById('dailyList').innerHTML=dates.slice().reverse().map(d=>{const t=totals(d);return `<div class="entry"><div><strong>${fmtDate(d)}</strong></div><div class="nums"><strong>${fmtNum(t.protein)} / ${db.goals.protein}g protein</strong><small>${fmtNum(t.fiber)} / ${db.goals.fiber}g fiber</small></div></div>`}).join('')
 }
 function makeChart(id,labels,data,goal){
  return new Chart(document.getElementById(id),{
